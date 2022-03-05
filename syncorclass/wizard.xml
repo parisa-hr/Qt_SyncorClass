@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+/****************************************************************************
+**
+** Copyright (C) 2014 Syncor Systems, Inc.
+**
+** This file is for use with  Qt Creator.
+** This file and the associated nsclass.cpp and nsclass.h files are covered by
+** The MIT License (MIT)
+
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+**
+****************************************************************************/
+Author: Tod Gentille
+-->
+
+<wizard version="1" kind="class" id="A.ClassWithOptions" category="B.SyncorCppClasses">
+  <description>Creates a new C++ class with the name you provide and allows several additional options:
+
+1. The class can be wrapped in the namespace of your choice.
+2. Can specify to inherit from QObject, QWidget or none. 
+3. If inheriting from QObject or QWidget the associated #include will be added to the .h file.
+4. Can use  &lt;b&gt;#pragma once &lt;/b&gt; instead of the traditional include guards.
+5. Can create copy and assignment operators that are private 
+6. Can add the C++ 2011 delete keyword on those operators
+See the README.md file for more information.
+</description>
+	<icon>syncor48.png</icon>
+	<displayname>C++ Class with options</displayname>
+
+    <displaycategory>Syncor's C++ Class </displaycategory>
+	<files>
+		<file source="syncorclass.cpp" target="%ClassName:l%.%CppSourceSuffix%" openeditor="true" />
+		<file source="syncorclass.h" target="%ClassName:l%.%CppHeaderSuffix%" openeditor="true" />
+	</files>
+	<!-- Create parameter wizard page -->
+	<fieldpagetitle>C++ Class with options</fieldpagetitle>
+	<fields>
+		<!-- Specify class name -->
+		<field name="ClassName" mandatory="true">
+			<fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="MyClassname" placeholdertext="Enter a class name" />
+			<fielddescription>Class name:</fielddescription>
+		</field>
+		
+		<!-- Namespace options -->
+		<field name="WrapInNamespace">
+			<fieldcontrol class="QCheckBox" defaultvalue="true"/>
+			<fielddescription>Wrap class in namespace </fielddescription>
+		</field> 
+		
+		<field  mandatory="false" name="NamespaceName" omit-empty="true">
+			<fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]*$" defaulttext="MyNamespace" placeholdertext="Enter a namespace name" />
+			<fielddescription>Namespace name:</fielddescription>
+		</field>
+		
+		<!-- Select the class to inherit from (or leave at none) -->
+		<field name="DataType">
+		    <fielddescription>Inherit from:</fielddescription>
+				<fieldcontrol class="QComboBox" defaultindex="0">
+					<comboentries>
+						<comboentry value="">
+							<comboentrytext>none</comboentrytext>
+						</comboentry>
+						<comboentry value="QObject">
+							<comboentrytext>QObject</comboentrytext>
+						</comboentry>
+						<comboentry value="QWidget">
+							<comboentrytext>QWidget</comboentrytext>
+						</comboentry>
+					</comboentries>
+			</fieldcontrol>
+        </field>
+		
+		<!-- Various true/false checkbox options -->
+		<field name="UseOncePragma">
+			<fieldcontrol class="QCheckBox" defaultvalue="true"/>
+			<fielddescription>Use #pragma once instead of include guards </fielddescription>
+		</field> 
+		
+		<field name="DelteDefaultCopyAssignment">
+			<fieldcontrol class="QCheckBox" defaultvalue="true"/>
+			<fielddescription>Delete (or hide) the default copy and assignment operators </fielddescription>
+		</field> 
+		
+		<field name="UseCpp2011">
+			<fieldcontrol class="QCheckBox" defaultvalue="true"/>
+			<fielddescription>Use C++ 2011 delete keyword </fielddescription>
+		</field> 
+		<field name="Cpp11">
+			<fielddescription> C++11 Note:</fielddescription>
+			<fieldcontrol class="QTextEdit" acceptRichText="true" readonly="true" setMaximumHeight="25"
+			 defaulttext="You must add 
+			 &lt;br&gt;
+			 &lt;b&gt; QMAKE_CXXFLAGS += -std=c++11 &lt;/b&gt; 
+			 &lt;br&gt; 
+			 to your .pro file to enable C++ 2011 support." />
+		</field>
+
+		
+		</fields>
+		
+		<!-- validation rules -->
+		<validationrules>
+			<validationrule condition='"%ClassName" != "QAbstractListModel"'>
+				<message>%ClassName% cannot be used as class name.</message>
+			</validationrule>
+			<validationrule condition='"%ClassName%" != "class"'>
+				<message>%ClassName% cannot be used as class name.</message>
+			</validationrule>
+
+			<validationrule condition='"%NamespaceName%" != "namespace"'>
+				<message>%NamespaceName% cannot be used as namespace name.</message>
+			</validationrule>
+		</validationrules>
+	</wizard>
